@@ -1,8 +1,4 @@
-deps/
-!deps/librdkafka.gyp
-!deps/librdkafka
+deps/*
 .gitmodules
 Dockerfile
-deps/librdkafka/config.h
-build
 .github

@@ -1,12 +1,8 @@
-build/
 node_modules/
-deps/librdkafka
+deps/*
 npm-debug.log
 
 docs
-
-deps/*
-!deps/*.gyp
 
 .DS_Store
 
