@@ -1,14 +1,8 @@
 {
   "name": "node-rdkafka",
-  "version": "2.4.2",
+  "version": "2.4.2-win",
   "description": "Node.js bindings for librdkafka",
   "main": "lib/index.js",
-  "scripts": {
-    "configure": "node-gyp configure",
-    "build": "node-gyp build",
-    "test": "make test",
-    "install": "node-gyp rebuild"
-  },
   "keywords": [
     "kafka",
     "librdkafka"
@@ -27,6 +21,9 @@
       "email": "mattness@users.noreply.github.com"
     }
   ],
+  "publishConfig": {
+    "registry": "http://192.168.97.68:4873"
+  },
   "license": "MIT",
   "devDependencies": {
     "jshint": "2.x",
