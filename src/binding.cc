@@ -131,7 +131,7 @@ void ConstantsInit(v8::Local<v8::Object> exports) {
   NODE_DEFINE_CONSTANT(errorCodes, ErrorCode::ERR_CLUSTER_AUTHORIZATION_FAILED);
   NODE_DEFINE_CONSTANT(errorCodes, ErrorCode::ERR__TIMED_OUT_QUEUE);
 
-  exports->Set(Nan::New("errorCodes").ToLocalChecked(), errorCodes);
+  Nan::Set(exports, Nan::New("errorCodes").ToLocalChecked(), errorCodes);
 
   v8::Local<v8::Object> topicConstants = Nan::New<v8::Object>();
 
@@ -142,24 +142,26 @@ void ConstantsInit(v8::Local<v8::Object> exports) {
   NODE_DEFINE_CONSTANT(topicConstants, RdKafka::Topic::OFFSET_STORED);
   NODE_DEFINE_CONSTANT(topicConstants, RdKafka::Topic::OFFSET_INVALID);
 
-  exports->Set(Nan::New("topic").ToLocalChecked(), topicConstants);
+  Nan::Set(exports, Nan::New("topic").ToLocalChecked(), topicConstants);
 
-  exports->Set(Nan::New("err2str").ToLocalChecked(),
+  Nan::Set(exports, Nan::New("err2str").ToLocalChecked(),
     Nan::GetFunction(Nan::New<v8::FunctionTemplate>(NodeRdKafkaErr2Str)).ToLocalChecked());  // NOLINT
 
-  exports->Set(Nan::New("features").ToLocalChecked(),
+  Nan::Set(exports, Nan::New("features").ToLocalChecked(),
     Nan::GetFunction(Nan::New<v8::FunctionTemplate>(NodeRdKafkaBuildInFeatures)).ToLocalChecked());  // NOLINT
 }
 
-void Init(v8::Local<v8::Object> exports, v8::Local<v8::Object> module) {
-  AtExit(RdKafkaCleanup);
+void Init(v8::Local<v8::Object> exports, v8::Local<v8::Value> m_, void* v_) {
+  v8::Local<v8::Context> context = Nan::GetCurrentContext();
+  node::Environment* env = node::GetCurrentEnvironment(context);
+  AtExit(env, RdKafkaCleanup, NULL);
   KafkaConsumer::Init(exports);
   Producer::Init(exports);
   AdminClient::Init(exports);
   Topic::Init(exports);
   ConstantsInit(exports);
 
-  exports->Set(Nan::New("librdkafkaVersion").ToLocalChecked(),
+  Nan::Set(exports, Nan::New("librdkafkaVersion").ToLocalChecked(),
       Nan::New(RdKafka::version_str().c_str()).ToLocalChecked());
 }
 
