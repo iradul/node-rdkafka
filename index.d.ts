@@ -1,10 +1,19 @@
 import { Readable, Writable } from 'stream';
 import { EventEmitter } from 'events';
+import {
+    GlobalConfig,
+    TopicConfig,
+    ConsumerGlobalConfig,
+    ConsumerTopicConfig,
+    ProducerGlobalConfig,
+    ProducerTopicConfig,
+} from './config';
 
+export * from './config';
 export * from './errors';
 
 export class Client extends EventEmitter {
-    constructor(globalConf: any, SubClientType: any, topicConf: any);
+    constructor(globalConf: GlobalConfig, SubClientType: any, topicConf: TopicConfig);
 
     connect(metadataOptions?: any, cb?: (err: any, data: any) => any): this;
 
@@ -82,7 +91,7 @@ export class Client extends EventEmitter {
 export type ErrorWrap<T> = boolean | T;
 
 export class KafkaConsumer extends Client {
-    constructor(conf: any, topicConf: any);
+    constructor(conf: ConsumerGlobalConfig, topicConf: ConsumerTopicConfig);
 
     assign(assignments: any): this;
 
@@ -124,11 +133,11 @@ export class KafkaConsumer extends Client {
 
     unsubscribe(): this;
 
-    static createReadStream(conf: any, topicConfig: any, streamOptions: any): ConsumerStream;
+    static createReadStream(conf: ConsumerGlobalConfig, topicConfig: ConsumerTopicConfig, streamOptions: any): ConsumerStream;
 }
 
 export class Producer extends Client {
-    constructor(conf: any, topicConf?: any);
+    constructor(conf: ProducerGlobalConfig, topicConf?: ProducerTopicConfig);
 
     flush(timeout: any, callback: any): any;
 
@@ -138,7 +147,7 @@ export class Producer extends Client {
 
     setPollInterval(interval: any): any;
 
-    static createWriteStream(conf: any, topicConf: any, streamOptions: any): ProducerStream;
+    static createWriteStream(conf: ProducerGlobalConfig, topicConf: ProducerTopicConfig, streamOptions: any): ProducerStream;
 }
 
 export class HighLevelProducer extends Producer {
@@ -182,9 +191,9 @@ declare interface ConsumerStreamMessage {
     timestamp?: number
 }
 
-export function createReadStream(conf: any, topicConf: any, streamOptions: any): ConsumerStream;
+export function createReadStream(conf: ConsumerGlobalConfig, topicConf: ConsumerTopicConfig, streamOptions: any): ConsumerStream;
 
-export function createWriteStream(conf: any, topicConf: any, streamOptions: any): ProducerStream;
+export function createWriteStream(conf: ProducerGlobalConfig, topicConf: ProducerTopicConfig, streamOptions: any): ProducerStream;
 
 declare interface NewTopic {
     topic: string;
@@ -207,5 +216,5 @@ declare interface InternalAdminClient {
 }
 
 export class AdminClient {
-    static create(conf: object): InternalAdminClient;
+    static create(conf: GlobalConfig): InternalAdminClient;
 }
